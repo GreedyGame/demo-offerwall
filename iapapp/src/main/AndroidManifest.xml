@@ -9,8 +9,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OfferwallDemoApp">
         <activity
-            android:name=".Main2Activity"
-            android:exported="false" />
+            android:name=".ui.launcher.IapLauncherActivity"
+            android:exported="false"
+            android:theme="@style/Theme.InApp" />
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.InApp" />
+        <activity
+            android:name=".ui.details.BookDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.InApp" />
+        <activity
+            android:name=".ui.store.StoreActivity"
+            android:exported="false"
+            android:theme="@style/Theme.InApp" />
     </application>
 
 </manifest>

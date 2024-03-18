@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="black_10">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="bg">#F2EEE3</color>
+    <color name="status_bar">#191815</color>
+    <color name="black_variant">#191815</color>
+    <color name="tab_inactive">#E7E0CB</color>
+    <color name="tab_active">#191815</color>
+    <color name="red">#E06065</color>
+    <color name="red_50">#80E06065</color>
 </resources>
