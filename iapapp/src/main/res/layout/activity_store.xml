@@ -55,6 +55,7 @@
                 android:drawablePadding="6dp"
                 android:gravity="center"
                 android:textSize="36sp"
+                android:textStyle="bold"
                 app:drawableStartCompat="@drawable/ic_coin"
                 tools:text="1200" />
 
@@ -90,11 +91,13 @@
                         android:gravity="center_vertical"
                         android:text="200 Coins"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_coin" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/youngserif_regular"
                         android:gravity="center"
                         android:text="$10"
                         android:textSize="16sp" />
@@ -127,11 +130,13 @@
                         android:gravity="center_vertical"
                         android:text="400 Coins"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_coin" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/youngserif_regular"
                         android:gravity="center"
                         android:text="$18"
                         android:textSize="16sp" />
@@ -172,11 +177,13 @@
                         android:gravity="center_vertical"
                         android:text="800 Coins"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_coin" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/youngserif_regular"
                         android:gravity="center"
                         android:text="$22"
                         android:textSize="16sp" />
@@ -209,11 +216,13 @@
                         android:gravity="center_vertical"
                         android:text="1500 Coins"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_coin" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/youngserif_regular"
                         android:gravity="center"
                         android:text="$28"
                         android:textSize="16sp" />
@@ -246,11 +255,13 @@
                         android:gravity="center_vertical"
                         android:text="Unlimited Coins"
                         android:textSize="16sp"
+                        android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_coin" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/youngserif_regular"
                         android:gravity="center"
                         android:text="Free"
                         android:textSize="16sp" />

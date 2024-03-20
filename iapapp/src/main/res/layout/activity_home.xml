@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="28dp"
+            android:fontFamily="@font/youngserif_regular"
             android:text="Hey,\nWhat will you listen today?"
             android:textSize="24sp"
             app:layout_constraintTop_toBottomOf="@id/imgAvatar"

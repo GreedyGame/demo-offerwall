@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/youngserif_regular"
         android:text="Pocket Audio"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

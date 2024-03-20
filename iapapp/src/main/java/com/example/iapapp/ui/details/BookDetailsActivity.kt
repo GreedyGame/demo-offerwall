@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.iapapp.R
+import com.example.iapapp.data.BookModel
 import com.example.iapapp.databinding.ActivityBookDetailsBinding
 import com.example.iapapp.ui.get_more_coins.GetMoreCoinsBottomSheet
 import com.example.iapapp.ui.store.StoreActivity
@@ -77,52 +78,20 @@ class BookDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showGetMoreCoinsDialog() {
-        val dialog = GetMoreCoinsBottomSheet.newInstance {
-            updateWallBalanceUi()
-            mViewModel.resumePlayer()
-            mViewModel.markBookAsUnlocked()
-        }
-        dialog.show(supportFragmentManager, null)
-    }
-
     private fun setupObservers() {
         with(mViewModel) {
             bookModel.observe(this@BookDetailsActivity) {
-                with(mBinding) {
-                    imgBookCover.setImageResource(it.bookCoverImage)
-                    tvRating.text = it.rating.toString()
-                    tvLanguage.text = it.language
-                    tvDuration.text = "${it.durationInMin} Minute"
-                    tvTitle.text = it.bookName
-                    tvAuthor.text = it.bookAuthor
-                }
+                updateBookInfo(it)
             }
             playerState.observe(this@BookDetailsActivity) {
                 when (it) {
                     PlayerState.Idle -> {
-                        mMediaPlayer =
-                            MediaPlayer.create(this@BookDetailsActivity, R.raw.sample_audio)
-                        with(mBinding) {
-                            btnPlayPause.setImageResource(R.drawable.ic_play)
-                            tvCurrentTime.text = converter(mMediaPlayer.currentPosition.toLong())
-                            seekbar.progress = mMediaPlayer.currentPosition
-                            tvEndTime.text = converter(mMediaPlayer.duration.toLong())
-                            seekbar.max = mMediaPlayer.duration
-                            disablePlayerSideButtons(true)
-                        }
+                        createMediaPlayer()
+                        disablePlayerSideButtons(true)
                     }
 
                     PlayerState.Playing -> {
-                        mMediaPlayer.start()
-                        mMediaPlayer.setOnCompletionListener {
-                            mViewModel.audioFinishedPlaying()
-                        }
-                        with(mBinding) {
-                            btnPlayPause.setImageResource(R.drawable.ic_pause)
-                        }
-                        mViewModel.watchProgress()
-                        disablePlayerSideButtons(false)
+                        playMediaPlayer()
                     }
 
                     PlayerState.Paused -> {
@@ -136,50 +105,81 @@ class BookDetailsActivity : AppCompatActivity() {
                     PlayerState.Finished -> {
                         with(mBinding) {
                             btnPlayPause.setImageResource(R.drawable.ic_play)
-                            tvCurrentTime.text = converter(mMediaPlayer.duration.toLong())
-                            seekbar.progress = mMediaPlayer.duration
-                            tvEndTime.text = converter(mMediaPlayer.duration.toLong())
-                            seekbar.max = mMediaPlayer.duration
+                            updateCurrentTimeUi(mMediaPlayer.duration)
+                            updateEndTimeUi(mMediaPlayer.duration)
                             disablePlayerSideButtons(true)
                         }
                     }
 
                     PlayerState.Restart -> {
                         mMediaPlayer.reset()
-                        mMediaPlayer =
-                            MediaPlayer.create(this@BookDetailsActivity, R.raw.sample_audio)
-                        with(mBinding) {
-                            btnPlayPause.setImageResource(R.drawable.ic_play)
-                            tvCurrentTime.text = converter(mMediaPlayer.currentPosition.toLong())
-                            seekbar.progress = mMediaPlayer.currentPosition
-                            tvEndTime.text = converter(mMediaPlayer.duration.toLong())
-                            seekbar.max = mMediaPlayer.duration
-                        }
-                        mMediaPlayer.start()
-                        mMediaPlayer.setOnCompletionListener {
-                            mViewModel.audioFinishedPlaying()
-                        }
-                        with(mBinding) {
-                            btnPlayPause.setImageResource(R.drawable.ic_pause)
-                        }
-                        mViewModel.watchProgress()
-                        disablePlayerSideButtons(false)
+                        createMediaPlayer()
+                        playMediaPlayer()
                     }
                 }
             }
             progressWatcherRunning.observe(this@BookDetailsActivity) {
-                with(mBinding) {
-                    tvCurrentTime.text = converter(mMediaPlayer.currentPosition.toLong())
-                    seekbar.progress = mMediaPlayer.currentPosition
-                }
+                updateCurrentTimeUi(mMediaPlayer.currentPosition)
             }
             updateCurrentTime.observe(this@BookDetailsActivity) {
-                with(mBinding) {
-                    tvCurrentTime.text = converter(it.toLong())
-                    seekbar.progress = it
-                    mMediaPlayer.seekTo(it)
-                }
+                updateCurrentTimeUi(it)
+                mMediaPlayer.seekTo(it)
             }
+        }
+    }
+
+    private fun showGetMoreCoinsDialog() {
+        val dialog = GetMoreCoinsBottomSheet.newInstance {
+            updateWallBalanceUi()
+            mViewModel.resumePlayer()
+            mViewModel.markBookAsUnlocked()
+        }
+        dialog.show(supportFragmentManager, null)
+    }
+
+    private fun updateBookInfo(model: BookModel) {
+        with(mBinding) {
+            imgBookCover.setImageResource(model.bookCoverImage)
+            tvRating.text = model.rating.toString()
+            tvLanguage.text = model.language
+            tvDuration.text = "${model.durationInMin} Minute"
+            tvTitle.text = model.bookName
+            tvAuthor.text = model.bookAuthor
+        }
+    }
+
+    private fun createMediaPlayer() {
+        mMediaPlayer = MediaPlayer.create(this@BookDetailsActivity, R.raw.sample_audio)
+        with(mBinding) {
+            btnPlayPause.setImageResource(R.drawable.ic_play)
+            updateCurrentTimeUi(mMediaPlayer.currentPosition)
+            updateEndTimeUi(mMediaPlayer.duration)
+        }
+    }
+
+    private fun playMediaPlayer() {
+        disablePlayerSideButtons(false)
+        mMediaPlayer.start()
+        mMediaPlayer.setOnCompletionListener {
+            mViewModel.audioFinishedPlaying()
+        }
+        with(mBinding) {
+            btnPlayPause.setImageResource(R.drawable.ic_pause)
+        }
+        mViewModel.watchProgress()
+    }
+
+    private fun updateCurrentTimeUi(currentPosition: Int) {
+        with(mBinding) {
+            tvCurrentTime.text = converterMillisToTime(currentPosition.toLong())
+            seekbar.progress = currentPosition
+        }
+    }
+
+    private fun updateEndTimeUi(duration: Int) {
+        with(mBinding) {
+            tvEndTime.text = converterMillisToTime(duration.toLong())
+            seekbar.max = duration
         }
     }
 
@@ -213,7 +213,7 @@ class BookDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun converter(millis: Long): String = String.format(
+    private fun converterMillisToTime(millis: Long): String = String.format(
         "%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(
             TimeUnit.MILLISECONDS.toHours(millis)
         ), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(
