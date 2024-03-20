@@ -44,8 +44,4 @@ dependencies {
     api(libs.koin.core)
     api(libs.koin.android)
     api("com.pubscale.sdkone:offerwall:1.0.6-beta2")
-
-    testApi(libs.junit)
-    androidTestApi(libs.androidx.junit)
-    androidTestApi(libs.androidx.espresso.core)
 }
