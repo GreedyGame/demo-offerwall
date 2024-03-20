@@ -26,7 +26,7 @@
             android:layout_marginStart="26dp"
             android:layout_marginTop="28dp"
             android:layout_marginBottom="23dp"
-            app:srcCompat="@drawable/ic_pubscale" />
+            app:srcCompat="@drawable/ic_pubscale_logo" />
 
     </com.google.android.material.card.MaterialCardView>
 

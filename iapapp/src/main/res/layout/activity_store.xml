@@ -269,7 +269,7 @@
             android:alpha="0.6"
             android:backgroundTint="@color/bg"
             android:paddingVertical="16dp"
-            android:text="Reset wallet balance"
+            android:text="Reset Purchases"
             android:textColor="@color/black_variant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

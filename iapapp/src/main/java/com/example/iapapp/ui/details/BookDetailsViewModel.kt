@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.iapapp.data.BookModel
+import com.example.iapapp.utils.AppPreferences
 import com.example.iapapp.utils.IntentConstants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class BookDetailsViewModel : ViewModel() {
+class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewModel() {
     private val _bookModel = MutableLiveData<BookModel>()
     val bookModel: LiveData<BookModel>
         get() = _bookModel
@@ -68,6 +69,22 @@ class BookDetailsViewModel : ViewModel() {
         _playerState.postValue(PlayerState.Finished)
     }
 
+    fun resumePlayer() {
+        when (playerState.value!!) {
+            PlayerState.Idle, PlayerState.Paused -> {
+                _playerState.postValue(PlayerState.Playing)
+            }
+
+            PlayerState.Playing, PlayerState.Restart -> {
+                return
+            }
+
+            PlayerState.Finished -> {
+                _playerState.postValue(PlayerState.Restart)
+            }
+        }
+    }
+
     fun pausePlayer() {
         when (playerState.value!!) {
             PlayerState.Idle, PlayerState.Paused, PlayerState.Finished -> {
@@ -86,6 +103,50 @@ class BookDetailsViewModel : ViewModel() {
             return
         }
         _updateCurrentTime.postValue(progress)
+    }
+
+    fun markBookAsUnlocked() {
+        when (bookModel.value?.bookName) {
+            "Moby Dick" -> {
+                appPreferences.isBook1Unlocked = true
+            }
+
+            "Authority" -> {
+                appPreferences.isBook2Unlocked = true
+            }
+
+            "You were never really here" -> {
+                appPreferences.isBook3Unlocked = true
+            }
+
+            "1000 Black Umbrellas" -> {
+                appPreferences.isBook4Unlocked = true
+            }
+        }
+    }
+
+    fun isBookUnlocked(): Boolean {
+        return when (bookModel.value?.bookName) {
+            "Moby Dick" -> {
+                appPreferences.isBook1Unlocked
+            }
+
+            "Authority" -> {
+                appPreferences.isBook2Unlocked
+            }
+
+            "You were never really here" -> {
+                appPreferences.isBook3Unlocked
+            }
+
+            "1000 Black Umbrellas" -> {
+                appPreferences.isBook4Unlocked
+            }
+
+            else -> {
+                false
+            }
+        }
     }
 }
 

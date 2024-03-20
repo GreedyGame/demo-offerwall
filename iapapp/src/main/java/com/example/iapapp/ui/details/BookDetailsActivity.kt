@@ -31,9 +31,7 @@ class BookDetailsActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        with(mBinding) {
-            tvWalletBalance.text = mAppPreferences.currentBalance.toString()
-        }
+        updateWallBalanceUi()
     }
 
     override fun onPause() {
@@ -59,7 +57,7 @@ class BookDetailsActivity : AppCompatActivity() {
                 override fun onProgressChanged(
                     seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
-                    if (progress >= 5_000) {
+                    if (progress >= 10_000 && !mViewModel.isBookUnlocked()) {
                         mViewModel.pausePlayer()
                         showGetMoreCoinsDialog()
                         return
@@ -80,7 +78,11 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     private fun showGetMoreCoinsDialog() {
-        val dialog = GetMoreCoinsBottomSheet.newInstance()
+        val dialog = GetMoreCoinsBottomSheet.newInstance {
+            updateWallBalanceUi()
+            mViewModel.resumePlayer()
+            mViewModel.markBookAsUnlocked()
+        }
         dialog.show(supportFragmentManager, null)
     }
 
@@ -202,6 +204,12 @@ class BookDetailsActivity : AppCompatActivity() {
 
             btnRewind.isFocusable = true
             btnFastForward.isFocusable = true
+        }
+    }
+
+    private fun updateWallBalanceUi() {
+        with(mBinding) {
+            tvWalletBalance.text = mAppPreferences.currentBalance.toString()
         }
     }
 

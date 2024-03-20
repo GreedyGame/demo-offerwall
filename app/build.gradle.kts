@@ -55,4 +55,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(project(":navigation"))
+
+    implementation("com.pubscale.sdkone:offerwall:1.0.6-beta2")
 }

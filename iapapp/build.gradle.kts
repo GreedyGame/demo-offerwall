@@ -50,4 +50,6 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+
+    implementation("com.pubscale.sdkone:offerwall:1.0.6-beta2")
 }

@@ -11,12 +11,13 @@ import com.example.iapapp.utils.AppPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.ext.android.inject
 
-class GetMoreCoinsBottomSheet : BottomSheetDialogFragment() {
+class GetMoreCoinsBottomSheet(private val onBookPurchased: () -> Unit) :
+    BottomSheetDialogFragment() {
     private lateinit var mBinding: BottomSheetGetMoreCoinsBinding
     private val mAppPreferences by inject<AppPreferences>()
 
     companion object {
-        fun newInstance() = GetMoreCoinsBottomSheet()
+        fun newInstance(onBookPurchased: () -> Unit) = GetMoreCoinsBottomSheet(onBookPurchased)
     }
 
     override fun onCreateView(
@@ -35,15 +36,28 @@ class GetMoreCoinsBottomSheet : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         with(mBinding) {
+            val unlockCost = 500
             tvWalletBalance.text = mAppPreferences.currentBalance.toString()
+            tvUnlockCost.text = unlockCost.toString()
+
+            if (mAppPreferences.currentBalance >= unlockCost) {
+                btnGetMoreCoins.text = "Unlock Now"
+                btnGetMoreCoins.setOnClickListener {
+                    mAppPreferences.currentBalance -= 500
+                    onBookPurchased.invoke()
+                    dismiss()
+                }
+            } else {
+                btnGetMoreCoins.text = "Get More Coins"
+                btnGetMoreCoins.setOnClickListener {
+                    startActivity(Intent(requireActivity(), StoreActivity::class.java))
+                }
+            }
         }
     }
 
     private fun setupListeners() {
         with(mBinding) {
-            btnGetMoreCoins.setOnClickListener {
-                startActivity(Intent(requireActivity(), StoreActivity::class.java))
-            }
             btnMaybeLater.setOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }

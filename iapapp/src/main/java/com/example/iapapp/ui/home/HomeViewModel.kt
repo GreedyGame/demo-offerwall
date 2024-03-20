@@ -20,9 +20,9 @@ class HomeViewModel : ViewModel() {
 
     val defaultBooks = listOf(
         BookModel("Moby Dick", "Herman Meville", R.drawable.ic_book_1, 4.5, "English", 1),
-        BookModel("Authority", "Jeff Vandermer", R.drawable.ic_book_3, 4.1, "English", 1),
+        BookModel("Authority", "Jeff Vandermer", R.drawable.ic_book_2, 4.1, "English", 1),
         BookModel(
-            "You were never really here", "Jonathan Ames", R.drawable.ic_book_2, 4.2, "English", 1
+            "You were never really here", "Jonathan Ames", R.drawable.ic_book_3, 4.2, "English", 1
         ),
         BookModel("1000 Black Umbrellas", "Daniel McGinn", R.drawable.ic_book_4, 4.2, "English", 1)
     )

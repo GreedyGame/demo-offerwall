@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Unlock Full Episode"
+        android:text="Unlock Full Book"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,18 +30,18 @@
         app:layout_constraintTop_toBottomOf="@id/text" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/text3"
+        android:id="@+id/tvUnlockCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:text="3000"
         android:textSize="20sp"
         app:drawableStartCompat="@drawable/ic_coin"
         app:layout_constraintEnd_toEndOf="@id/text1"
         app:layout_constraintStart_toStartOf="@id/text1"
-        app:layout_constraintTop_toBottomOf="@id/text1" />
+        app:layout_constraintTop_toBottomOf="@id/text1"
+        tools:text="500" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text2"
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:paddingVertical="16dp"
-        android:text="maybe later"
+        android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
