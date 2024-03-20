@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.navigation"
+    namespace = "com.example.iapgame"
     compileSdk = 34
 
     defaultConfig {
@@ -30,10 +30,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(project(":sharedLibs"))
-    implementation(project(":iapapp"))
-    implementation(project(":iapgame"))
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.navigation"
+    namespace = "com.example.sharedlibs"
     compileSdk = 34
 
     defaultConfig {
@@ -33,7 +33,19 @@ android {
 }
 
 dependencies {
-    implementation(project(":sharedLibs"))
-    implementation(project(":iapapp"))
-    implementation(project(":iapgame"))
+
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
+    api(libs.material)
+    api(libs.androidx.activity)
+    api(libs.androidx.constraintlayout)
+
+    api(platform(libs.koin.bom))
+    api(libs.koin.core)
+    api(libs.koin.android)
+    api("com.pubscale.sdkone:offerwall:1.0.6-beta2")
+
+    testApi(libs.junit)
+    androidTestApi(libs.androidx.junit)
+    androidTestApi(libs.androidx.espresso.core)
 }

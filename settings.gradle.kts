@@ -23,3 +23,5 @@ rootProject.name = "offerwall demo app"
 include(":app")
 include(":iapapp")
 include(":navigation")
+include(":iapgame")
+include(":sharedLibs")
