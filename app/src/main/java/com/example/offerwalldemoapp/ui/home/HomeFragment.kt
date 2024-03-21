@@ -31,6 +31,9 @@ class HomeFragment : Fragment() {
 
     private fun setupListeners() {
         with(mBinding) {
+            cardGameDemo.setOnClickListener {
+                appCoordinator.showIapGameDemoApp(requireActivity())
+            }
             cardIapDemo.setOnClickListener {
                 appCoordinator.showIapDemoApp(requireActivity())
             }

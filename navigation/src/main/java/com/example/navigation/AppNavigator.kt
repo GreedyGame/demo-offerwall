@@ -4,4 +4,5 @@ import android.app.Activity
 
 interface AppNavigator {
     fun showIapDemoApp(activity: Activity)
+    fun showIapGameDemoApp(activity: Activity)
 }
