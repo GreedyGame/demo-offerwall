@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.iapgame.R
 import com.example.iapgame.racingcar_game.ui.theme.Brown
 import com.example.iapgame.racingcar_game.ui.theme.Green
@@ -43,7 +44,10 @@ import com.example.iapgame.racingcar_game.ui.theme.pricedown
 fun GetReadyScreen(
     gameScore: Int, exitGame: () -> Unit, startGame: () -> Unit
 ) {
-    Dialog(onDismissRequest = { exitGame() }) {
+    Dialog(
+        onDismissRequest = { exitGame() },
+        properties = DialogProperties(dismissOnClickOutside = false)
+    ) {
         Column(
             modifier = Modifier.wrapContentSize(),
             verticalArrangement = Arrangement.Center,
