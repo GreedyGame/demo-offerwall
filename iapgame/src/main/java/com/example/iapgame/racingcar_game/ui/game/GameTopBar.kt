@@ -19,7 +19,7 @@ import com.example.iapgame.R
 import com.example.iapgame.racingcar_game.ui.theme.pricedown
 
 @Composable
-fun TopInfoTexts(gameScore: () -> Int, showHome: () -> Unit, modifier: Modifier = Modifier) {
+fun GameTopBar(gameScore: () -> Int, showHome: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,

@@ -4,8 +4,11 @@ import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.iapgame.R
+import com.example.iapgame.racingcar_game.domain.usecase.GetCoinsUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.GetHighscoreUseCase
+import com.example.iapgame.racingcar_game.domain.usecase.SaveCoinsUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.SaveHighscoreUseCase
+import com.example.iapgame.racingcar_game.domain.usecase.ShopCarsUseCase
 import com.example.iapgame.racingcar_game.ui.models.AccelerationData
 import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.NightRacingResourcePack
@@ -29,6 +32,9 @@ import kotlinx.coroutines.launch
 class MainViewModel constructor(
     private val getHighscoreUseCase: GetHighscoreUseCase,
     private val saveHighscoreUseCase: SaveHighscoreUseCase,
+    private val getCoinsUseCase: GetCoinsUseCase,
+    private val saveCoinsUseCase: SaveCoinsUseCase,
+    private val shopCarsUseCase: ShopCarsUseCase,
     private val soundRepository: SoundRepository,
 ) : ViewModel() {
 
@@ -38,11 +44,17 @@ class MainViewModel constructor(
     private val _movementInput = MutableStateFlow(MovementInput.SwipeGestures)
     val movementInput = _movementInput.asStateFlow()
 
+    private val _availableCoins = MutableStateFlow(0)
+    val availableCoins = _availableCoins.asStateFlow()
+
     private val _gameScore = MutableStateFlow(INITIAL_GAME_SCORE)
     val gameScore = _gameScore.asStateFlow()
 
     private val _highscore = MutableStateFlow(0)
     val highscore = _highscore.asStateFlow()
+
+    private val _shopCars = MutableStateFlow(shopCarsUseCase.getShopCars())
+    val shopCars = _shopCars.asStateFlow()
 
     private val _resourcePack = MutableStateFlow<RacingResourcePack>(NightRacingResourcePack())
     val resourcePack = _resourcePack.asStateFlow()
@@ -64,15 +76,29 @@ class MainViewModel constructor(
     init {
         observeCollision()
         observeHighscore()
+        observeAvailableCoins()
+        observeShopCars()
 
         soundRepository.loadSound(NEW_HIGHSCORE_SOUND_ID, R.raw.new_highscore)
         soundRepository.loadSound(BLOCKER_HIT_SOUND_ID, R.raw.blocker_hit)
         soundRepository.loadSound(MILESTONE_REACH_SOUND_ID, R.raw.milestone_reach)
     }
 
+    private fun observeShopCars() {
+//        shopCarsUseCase.getShopCars().onEach {
+//            _shopCars.tryEmit(it)
+//        }.launchIn(viewModelScope)
+    }
+
     private fun observeHighscore() {
         getHighscoreUseCase.execute().onEach {
             _highscore.value = it
+        }.launchIn(viewModelScope)
+    }
+
+    private fun observeAvailableCoins() {
+        getCoinsUseCase.execute().onEach {
+            _availableCoins.value = it
         }.launchIn(viewModelScope)
     }
 
@@ -107,7 +133,6 @@ class MainViewModel constructor(
     fun setMovementInput(movementInput: MovementInput) {
         _movementInput.update { movementInput }
     }
-
 
     fun increaseGameScore() {
         _gameScore.update { currentScore ->

@@ -1,4 +1,4 @@
-package com.example.iapgame.racingcar_game.ui.get_ready
+package com.example.iapgame.racingcar_game.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,7 +42,7 @@ import com.example.iapgame.racingcar_game.ui.theme.pricedown
 
 @Composable
 fun HomeScreen(
-    gameScore: Int, exitGame: () -> Unit, startGame: () -> Unit
+    gameScore: Int, exitGame: () -> Unit, startGame: () -> Unit, shop: () -> Unit
 ) {
     Dialog(
         onDismissRequest = { exitGame() },
@@ -137,14 +137,13 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .height(30.dp)
             )
-
             Button(
                 shape = RoundedCornerShape(0),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier
                     .border(7.dp, Brown)
                     .padding(7.dp),
-                onClick = { },
+                onClick = shop,
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text(

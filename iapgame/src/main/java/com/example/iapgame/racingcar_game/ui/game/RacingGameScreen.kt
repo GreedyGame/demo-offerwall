@@ -1,6 +1,5 @@
 package com.example.iapgame.racingcar_game.ui.game
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,7 +18,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
@@ -27,29 +25,31 @@ import androidx.compose.ui.res.imageResource
 import com.example.iapgame.racingcar_game.ui.game.state.BackgroundState
 import com.example.iapgame.racingcar_game.ui.game.state.BlockersState
 import com.example.iapgame.racingcar_game.ui.game.state.CarState
+import com.example.iapgame.racingcar_game.ui.game.state.DialogState
 import com.example.iapgame.racingcar_game.ui.game.state.GameState
-import com.example.iapgame.racingcar_game.ui.get_ready.HomeScreen
+import com.example.iapgame.racingcar_game.ui.home.HomeScreen
 import com.example.iapgame.racingcar_game.ui.models.AccelerationData
 import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.Accelerometer
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.SwipeGestures
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.TapGestures
 import com.example.iapgame.racingcar_game.ui.models.RacingResourcePack
+import com.example.iapgame.racingcar_game.ui.shop.CarInfo
+import com.example.iapgame.racingcar_game.ui.shop.ShopScreen
 import com.example.iapgame.racingcar_game.utils.Constants
 import com.example.iapgame.racingcar_game.utils.Constants.CAR_MOVEMENT_SPRING_ANIMATION_STIFFNESS
 import com.example.iapgame.racingcar_game.utils.Constants.TICKER_ANIMATION_DURATION
 
 @Composable
 fun RacingGameScreen(
+    shopCars: () -> List<CarInfo>,
+    availableCoins: () -> Int,
     gameScore: () -> Int,
     highscore: () -> Int,
     acceleration: () -> AccelerationData,
     movementInput: () -> MovementInput,
     resourcePack: () -> RacingResourcePack,
-    isDevMode: () -> Boolean,
-    onChangeVehicleClick: () -> Unit,
     onGameScoreIncrease: () -> Unit,
-    onResetGameScore: () -> Unit,
     onBlockerRectsDraw: (List<Rect>) -> Unit,
     onCarRectDraw: (Rect) -> Unit,
     modifier: Modifier = Modifier,
@@ -63,6 +63,10 @@ fun RacingGameScreen(
     // states
     val gameState by remember {
         mutableStateOf(GameState())
+    }
+    // states
+    val dialogState by remember {
+        mutableStateOf(DialogState())
     }
     val carState by remember {
         mutableStateOf(
@@ -122,7 +126,9 @@ fun RacingGameScreen(
 
                     Accelerometer -> Modifier
                 }
-            } else Modifier)) {
+            } else {
+                Modifier
+            })) {
             GameCanvas(
                 gameState = gameState,
                 backgroundState = backgroundState,
@@ -134,57 +140,43 @@ fun RacingGameScreen(
                 onCarRectDraw = onCarRectDraw,
                 modifier = Modifier.fillMaxSize(),
             )
-
-            if (gameState.isRunning()) {
-                AnimatedVisibility(
-                    visible = gameState.isStopped() || gameState.isPaused(),
-                    modifier = Modifier.align(Alignment.Center)
-                ) {
-                    GameStateIndicator(
-                        gameState = gameState,
-                        onStartClicked = { gameState.run() },
-                        onChangeVehicleClicked = onChangeVehicleClick
-                    )
-                }
-            } else {
-                val score = if (gameState.isPaused()) {
-                    gameScore()
-                } else {
-                    highscore()
-                }
-                ShowHomeScreen(
-                    score,
-                    exitGame,
-                    startGame = {
-                        gameState.run()
+            if (!gameState.isRunning()) {
+                if (dialogState.isHome()) {
+                    val score = if (gameState.isPaused()) {
+                        gameScore()
+                    } else {
+                        highscore()
                     }
-                )
+                    HomeScreen(score, exitGame = exitGame, startGame = {
+                        gameState.run()
+                    }, shop = {
+                        dialogState.showShop()
+                    })
+                } else if (dialogState.isShop()) {
+                    ShopScreen(
+                        shopCars = {
+                            shopCars()
+                        },
+                        availableCoins = {
+                            availableCoins()
+                        },
+                        debitCoins = {
+                        },
+                        showHome = {
+                            dialogState.showHome()
+                        })
+                }
             }
         }
         if (gameState.isRunning()) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                TopInfoTexts(
-                    gameScore = gameScore,
-                    showHome = {
+                GameTopBar(
+                    gameScore = gameScore, showHome = {
                         gameState.pause()
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                        dialogState.showHome()
+                    }, modifier = Modifier.fillMaxWidth()
                 )
             }
         }
     }
 }
-
-@Composable
-fun ShowHomeScreen(
-    score: Int,
-    exitGame: () -> Unit,
-    startGame: () -> Unit
-) {
-    HomeScreen(
-        score,
-        exitGame = exitGame,
-        startGame = startGame
-    )
-}
-

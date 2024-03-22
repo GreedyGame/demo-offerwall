@@ -63,6 +63,8 @@ private fun NavGraphBuilder.gameScreen(
             }
         }
 
+        val availableCoins by viewModel.availableCoins.collectAsState()
+        val shopCars by viewModel.shopCars.collectAsState()
         val gameScore by viewModel.gameScore.collectAsState()
         val highscore by viewModel.highscore.collectAsState()
         val acceleration by viewModel.acceleration.collectAsState()
@@ -70,16 +72,14 @@ private fun NavGraphBuilder.gameScreen(
         val resourcePack by viewModel.resourcePack.collectAsState()
 
         RacingGameScreen(
-            isDevMode = { true },
-            onChangeVehicleClick = {
-            },
+            shopCars = { shopCars },
+            availableCoins = { availableCoins },
             gameScore = { gameScore },
             highscore = { highscore },
             resourcePack = { resourcePack },
             acceleration = { acceleration },
             movementInput = { movementInput },
             onGameScoreIncrease = viewModel::increaseGameScore,
-            onResetGameScore = viewModel::resetGameScore,
             onBlockerRectsDraw = viewModel::updateBlockerRects,
             onCarRectDraw = viewModel::updateCarRect,
             modifier = Modifier.fillMaxSize(),
