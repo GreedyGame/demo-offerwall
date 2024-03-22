@@ -28,7 +28,7 @@ import com.example.iapgame.racingcar_game.ui.game.state.BackgroundState
 import com.example.iapgame.racingcar_game.ui.game.state.BlockersState
 import com.example.iapgame.racingcar_game.ui.game.state.CarState
 import com.example.iapgame.racingcar_game.ui.game.state.GameState
-import com.example.iapgame.racingcar_game.ui.get_ready.GetReadyScreen
+import com.example.iapgame.racingcar_game.ui.get_ready.HomeScreen
 import com.example.iapgame.racingcar_game.ui.models.AccelerationData
 import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.Accelerometer
@@ -152,7 +152,7 @@ fun RacingGameScreen(
                 } else {
                     highscore()
                 }
-                ShowGetReadyScreen(
+                ShowHomeScreen(
                     score,
                     exitGame,
                     startGame = {
@@ -164,26 +164,24 @@ fun RacingGameScreen(
         if (gameState.isRunning()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TopInfoTexts(
-                    gameScore = gameScore, highscore = highscore, modifier = Modifier.fillMaxWidth()
+                    gameScore = gameScore,
+                    showHome = {
+                        gameState.pause()
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
-//            TopActionButtons(
-//                onPauseGameState = { gameState.pause() },
-//                onResetGameScore = onResetGameScore,
-//                isDevMode = isDevMode(),
-//                modifier = Modifier.fillMaxWidth()
-//            )
             }
         }
     }
 }
 
 @Composable
-fun ShowGetReadyScreen(
+fun ShowHomeScreen(
     score: Int,
     exitGame: () -> Unit,
     startGame: () -> Unit
 ) {
-    GetReadyScreen(
+    HomeScreen(
         score,
         exitGame = exitGame,
         startGame = startGame

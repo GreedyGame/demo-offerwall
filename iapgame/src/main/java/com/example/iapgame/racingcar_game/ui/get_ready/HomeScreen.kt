@@ -41,7 +41,7 @@ import com.example.iapgame.racingcar_game.ui.theme.minecraft
 import com.example.iapgame.racingcar_game.ui.theme.pricedown
 
 @Composable
-fun GetReadyScreen(
+fun HomeScreen(
     gameScore: Int, exitGame: () -> Unit, startGame: () -> Unit
 ) {
     Dialog(
