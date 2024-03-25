@@ -64,7 +64,7 @@ private fun NavGraphBuilder.gameScreen(
         }
 
         val availableCoins by viewModel.availableCoins.collectAsState()
-        val shopCars by viewModel.shopCars.collectAsState()
+        val shopCars by viewModel.cars.collectAsState()
         val gameScore by viewModel.gameScore.collectAsState()
         val highscore by viewModel.highscore.collectAsState()
         val acceleration by viewModel.acceleration.collectAsState()
@@ -85,6 +85,15 @@ private fun NavGraphBuilder.gameScreen(
             modifier = Modifier.fillMaxSize(),
             exitGame = {
                 exitGame()
+            },
+            newCarSelected = {
+                viewModel.newCarSelected(it)
+            },
+            buyCar = {
+                viewModel.buyCar(it)
+            },
+            creditCoins = {
+                viewModel.creditCoins(it)
             }
         )
     }

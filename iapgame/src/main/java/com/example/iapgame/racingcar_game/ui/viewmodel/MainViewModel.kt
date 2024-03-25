@@ -4,15 +4,17 @@ import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.iapgame.R
+import com.example.iapgame.racingcar_game.domain.usecase.GetCarsUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.GetCoinsUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.GetHighscoreUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.SaveCoinsUseCase
 import com.example.iapgame.racingcar_game.domain.usecase.SaveHighscoreUseCase
-import com.example.iapgame.racingcar_game.domain.usecase.ShopCarsUseCase
+import com.example.iapgame.racingcar_game.domain.usecase.UpdateCarsUseCase
 import com.example.iapgame.racingcar_game.ui.models.AccelerationData
 import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.NightRacingResourcePack
 import com.example.iapgame.racingcar_game.ui.models.RacingResourcePack
+import com.example.iapgame.racingcar_game.ui.shop.CarInfo
 import com.example.iapgame.racingcar_game.utils.Constants.COLLISION_SCORE_PENALTY
 import com.example.iapgame.racingcar_game.utils.Constants.DEFAULT_ACCELEROMETER_SENSITIVITY
 import com.example.iapgame.racingcar_game.utils.Constants.INITIAL_GAME_SCORE
@@ -34,14 +36,15 @@ class MainViewModel constructor(
     private val saveHighscoreUseCase: SaveHighscoreUseCase,
     private val getCoinsUseCase: GetCoinsUseCase,
     private val saveCoinsUseCase: SaveCoinsUseCase,
-    private val shopCarsUseCase: ShopCarsUseCase,
+    private val getCarsUseCase: GetCarsUseCase,
+    private val updateCarsUseCase: UpdateCarsUseCase,
     private val soundRepository: SoundRepository,
 ) : ViewModel() {
 
     private val _acceleration = MutableStateFlow(AccelerationData(0f, 0f, 0f))
     val acceleration = _acceleration.asStateFlow()
 
-    private val _movementInput = MutableStateFlow(MovementInput.SwipeGestures)
+    private val _movementInput = MutableStateFlow(MovementInput.TapGestures)
     val movementInput = _movementInput.asStateFlow()
 
     private val _availableCoins = MutableStateFlow(0)
@@ -53,8 +56,8 @@ class MainViewModel constructor(
     private val _highscore = MutableStateFlow(0)
     val highscore = _highscore.asStateFlow()
 
-    private val _shopCars = MutableStateFlow(shopCarsUseCase.getShopCars())
-    val shopCars = _shopCars.asStateFlow()
+    private val _cars = MutableStateFlow(listOf<CarInfo>())
+    val cars = _cars.asStateFlow()
 
     private val _resourcePack = MutableStateFlow<RacingResourcePack>(NightRacingResourcePack())
     val resourcePack = _resourcePack.asStateFlow()
@@ -78,16 +81,23 @@ class MainViewModel constructor(
         observeHighscore()
         observeAvailableCoins()
         observeShopCars()
+        observeSelectedCar()
 
         soundRepository.loadSound(NEW_HIGHSCORE_SOUND_ID, R.raw.new_highscore)
         soundRepository.loadSound(BLOCKER_HIT_SOUND_ID, R.raw.blocker_hit)
         soundRepository.loadSound(MILESTONE_REACH_SOUND_ID, R.raw.milestone_reach)
     }
 
+    private fun observeSelectedCar() {
+        viewModelScope.launch {
+            _resourcePack.emit(NightRacingResourcePack().copy(carImageDrawable = getCarsUseCase.selectedCar().carImage))
+        }
+    }
+
     private fun observeShopCars() {
-//        shopCarsUseCase.getShopCars().onEach {
-//            _shopCars.tryEmit(it)
-//        }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            _cars.emit(getCarsUseCase.execute())
+        }
     }
 
     private fun observeHighscore() {
@@ -138,8 +148,7 @@ class MainViewModel constructor(
         _gameScore.update { currentScore ->
             (currentScore + 1).also { newScore ->
                 saveNewHighscore(newScore)
-                if (newScore % 10 == 0)
-                    playMilestoneReachSound()
+                if (newScore % 10 == 0) playMilestoneReachSound()
             }
         }
     }
@@ -179,6 +188,14 @@ class MainViewModel constructor(
         carRectStateFlow.value = carRect
     }
 
+    fun newCarSelected(carInfo: CarInfo) {
+        viewModelScope.launch {
+            updateCarsUseCase.changeSelectedCar(carInfo)
+            observeShopCars()
+            observeSelectedCar()
+        }
+    }
+
     fun updateBlockerRects(blockerRects: List<Rect>) {
         blockerRectsStateFlow.value = blockerRects
     }
@@ -189,11 +206,23 @@ class MainViewModel constructor(
         const val MILESTONE_REACH_SOUND_ID = 3
     }
 
-
     private fun checkBlockerAndCarCollision(blockerRects: List<Rect>, carRect: Rect): Boolean {
         return blockerRects.any { blockerRect ->
             blockerRect.overlaps(carRect)
         }
     }
 
+    fun buyCar(carInfo: CarInfo) {
+        viewModelScope.launch {
+            saveCoinsUseCase.debit(carInfo.carCost)
+            updateCarsUseCase.buyCar(carInfo)
+            newCarSelected(carInfo)
+        }
+    }
+
+    fun creditCoins(coins: Int) {
+        viewModelScope.launch {
+            saveCoinsUseCase.credit(coins)
+        }
+    }
 }

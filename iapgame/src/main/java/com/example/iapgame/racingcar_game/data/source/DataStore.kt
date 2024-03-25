@@ -7,3 +7,4 @@ import androidx.datastore.preferences.preferencesDataStore
 
 val Context.highscoreDataStore: DataStore<Preferences> by preferencesDataStore(name = "highscore")
 val Context.coinsDataStore: DataStore<Preferences> by preferencesDataStore(name = "coins")
+val Context.cars: DataStore<Preferences> by preferencesDataStore(name = "cars")

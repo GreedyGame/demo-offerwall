@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.map
 class HighscoreRepositoryImpl(val context: Context) : HighscoreRepository {
 
     override suspend fun saveHighScore(score: Int) {
-
         context.highscoreDataStore.edit {
             it[HIGHSCORE_DATASTORE_KEY] = score
         }

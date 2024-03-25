@@ -8,12 +8,12 @@ class SaveCoinsUseCase(
 ) {
 
     suspend fun credit(coins: Int) {
-        val availableCoins = coinsRepository.getCoins().first()
-        coinsRepository.saveCoins(availableCoins + coins)
+        val balance = coinsRepository.getCoins().first() + coins
+        coinsRepository.saveCoins(balance)
     }
 
     suspend fun debit(coins: Int) {
-        val availableCoins = coinsRepository.getCoins().first()
-        coinsRepository.saveCoins(availableCoins - coins)
+        val balance = coinsRepository.getCoins().first() - coins
+        coinsRepository.saveCoins(balance)
     }
 }

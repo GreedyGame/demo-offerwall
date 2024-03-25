@@ -3,6 +3,7 @@ package com.example.iapgame.racingcar_game.ui.shop
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -62,8 +63,10 @@ import com.pubscale.sdkone.offerwall.models.Reward
 fun ShopScreen(
     shopCars: () -> List<CarInfo>,
     availableCoins: () -> Int,
-    debitCoins: (Int) -> Unit,
-    showHome: () -> Unit
+    showHome: () -> Unit,
+    newCarSelected: (CarInfo) -> Unit,
+    buyCar: (CarInfo) -> Unit,
+    creditCoins: (Int) -> Unit
 ) {
     Dialog(
         onDismissRequest = { showHome() }, properties = DialogProperties(
@@ -77,9 +80,14 @@ fun ShopScreen(
         ) {
             ShopTopRow(availableCoins = availableCoins, showHome = showHome)
             Box(modifier = Modifier.weight(1f)) {
-                ShowItems(shopCars = shopCars)
+                ShowItems(
+                    shopCars = shopCars,
+                    newCarSelected = newCarSelected,
+                    availableCoins = availableCoins,
+                    buyCar = buyCar
+                )
             }
-            GetFreeCoinsButton()
+            GetFreeCoinsButton(creditCoins = creditCoins)
         }
     }
 }
@@ -169,7 +177,11 @@ fun ShopTopRow(availableCoins: () -> Int, showHome: () -> Unit) {
 }
 
 @Composable
-fun ShowItems(shopCars: () -> List<CarInfo>) {
+fun ShowItems(
+    shopCars: () -> List<CarInfo>, newCarSelected: (CarInfo) -> Unit,
+    availableCoins: () -> Int, buyCar: (CarInfo) -> Unit,
+) {
+    val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -203,13 +215,20 @@ fun ShowItems(shopCars: () -> List<CarInfo>) {
                         start = iconSize / 2, top = iconSize / 2, bottom = iconSize / 2
                     )
                     .clickable {
-                        if (it.carIsOwned) {
+                        if (it.isSelected) {
                             return@clickable
                         }
-//                                if (availableCoins() < it.carCost) {
-//                                    return@clickable
-//                                }
-//                                debitCoins()
+                        if (it.carIsOwned) {
+                            newCarSelected(it)
+                            return@clickable
+                        }
+                        if (availableCoins() < it.carCost) {
+                            Toast
+                                .makeText(context, "Insufficient balance!", Toast.LENGTH_SHORT)
+                                .show()
+                            return@clickable
+                        }
+                        buyCar(it)
                     }) {
                     val bgColor = if (it.carIsOwned) {
                         Color.White
@@ -226,7 +245,7 @@ fun ShowItems(shopCars: () -> List<CarInfo>) {
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(vertical = 40.dp)
+                                .padding(vertical = 20.dp)
                         )
                     }
                     if (it.isSelected) {
@@ -312,7 +331,7 @@ fun ShowItems(shopCars: () -> List<CarInfo>) {
 }
 
 @Composable
-fun GetFreeCoinsButton() {
+fun GetFreeCoinsButton(creditCoins: (Int) -> Unit) {
     val context = LocalContext.current
     Button(
         modifier = Modifier.padding(
@@ -320,7 +339,9 @@ fun GetFreeCoinsButton() {
         ),
         onClick = {
             context.getActivity()?.let {
-                launchOfferwall(it)
+                launchOfferwall(it) {
+                    creditCoins(it)
+                }
             }
         },
         shape = RoundedCornerShape(19.dp),
@@ -335,8 +356,7 @@ fun GetFreeCoinsButton() {
             horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_game_coin),
-                contentDescription = null
+                painter = painterResource(id = R.drawable.ic_game_coin), contentDescription = null
             )
             Box(modifier = Modifier.padding(start = 6.dp, bottom = 2.dp)) {
                 Text(
@@ -375,7 +395,7 @@ fun Context.getActivity(): ComponentActivity? = when (this) {
     else -> null
 }
 
-fun launchOfferwall(activity: ComponentActivity) {
+fun launchOfferwall(activity: ComponentActivity, creditCoins: (Int) -> Unit) {
     val offerWallListener = object : OfferWallListener {
 
         override fun onOfferWallShowed() {
@@ -385,7 +405,7 @@ fun launchOfferwall(activity: ComponentActivity) {
         }
 
         override fun onRewardClaimed(reward: Reward) {
-//            updateWalletBalance(reward.amount.toInt())
+            creditCoins(reward.amount.toInt())
         }
 
         override fun onFailed(message: String) {

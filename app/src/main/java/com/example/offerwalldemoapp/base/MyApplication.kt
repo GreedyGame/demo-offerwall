@@ -18,7 +18,7 @@ class MyApplication : Application() {
         }
 
         val offerWallConfig =
-            OfferWallConfig.Builder(this, "test_49440083").setFullscreenEnabled(true).build()
+            OfferWallConfig.Builder(this, "49440083").setFullscreenEnabled(true).build()
         OfferWall.init(offerWallConfig, object : OfferWallInitListener {
             override fun onInitSuccess() {
             }

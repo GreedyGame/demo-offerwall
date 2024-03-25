@@ -22,7 +22,7 @@ import com.example.iapgame.racingcar_game.utils.Constants.LANE_COUNT
 import com.example.iapgame.racingcar_game.utils.Constants.STREET_SIDE_PERCENTAGE_EACH
 
 data class CarState(
-    private val image: ImageBitmap,
+    private var image: ImageBitmap,
     private var position: CarPosition = Middle
 ) {
 
@@ -134,4 +134,10 @@ data class CarState(
 
     fun getPosition() = position
 
+    fun changeImage(newImage: ImageBitmap) {
+        if (image == newImage) {
+            return
+        }
+        image = newImage
+    }
 }

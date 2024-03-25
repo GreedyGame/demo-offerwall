@@ -53,7 +53,10 @@ fun RacingGameScreen(
     onBlockerRectsDraw: (List<Rect>) -> Unit,
     onCarRectDraw: (Rect) -> Unit,
     modifier: Modifier = Modifier,
-    exitGame: () -> Unit
+    exitGame: () -> Unit,
+    newCarSelected: (CarInfo) -> Unit,
+    buyCar: (CarInfo) -> Unit,
+    creditCoins: (Int) -> Unit
 ) {
     // resources
     val carImageDrawableBitmap = ImageBitmap.imageResource(resourcePack().carImageDrawable)
@@ -73,6 +76,7 @@ fun RacingGameScreen(
             CarState(image = carImageDrawableBitmap)
         )
     }
+    carState.changeImage(carImageDrawableBitmap)
 
     val blockersState by remember {
         mutableStateOf(
@@ -160,11 +164,13 @@ fun RacingGameScreen(
                         availableCoins = {
                             availableCoins()
                         },
-                        debitCoins = {
-                        },
                         showHome = {
                             dialogState.showHome()
-                        })
+                        },
+                        newCarSelected = newCarSelected,
+                        buyCar = buyCar,
+                        creditCoins = creditCoins
+                    )
                 }
             }
         }
