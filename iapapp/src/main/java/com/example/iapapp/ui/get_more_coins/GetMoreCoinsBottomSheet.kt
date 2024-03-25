@@ -36,14 +36,14 @@ class GetMoreCoinsBottomSheet(private val onBookPurchased: () -> Unit) :
     override fun onStart() {
         super.onStart()
         with(mBinding) {
-            val unlockCost = 500
+            val unlockCost = 100
             tvWalletBalance.text = mAppPreferences.currentBalance.toString()
             tvUnlockCost.text = unlockCost.toString()
 
             if (mAppPreferences.currentBalance >= unlockCost) {
                 btnGetMoreCoins.text = "Unlock Now"
                 btnGetMoreCoins.setOnClickListener {
-                    mAppPreferences.currentBalance -= 500
+                    mAppPreferences.currentBalance -= unlockCost
                     onBookPurchased.invoke()
                     dismiss()
                 }
