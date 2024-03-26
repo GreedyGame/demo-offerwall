@@ -202,13 +202,13 @@ fun ShowItems(
                 )
             )
         )
+        val iconSize = 36.dp
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(horizontal = 30.dp),
+            contentPadding = PaddingValues(start = 30.dp - (iconSize / 2), end = 30.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(shopCars()) {
-                val iconSize = 36.dp
                 val offsetInPx = LocalDensity.current.run { (iconSize / 2).roundToPx() }
                 Box(modifier = Modifier
                     .padding(
@@ -335,12 +335,12 @@ fun GetFreeCoinsButton(creditCoins: (Int) -> Unit) {
     val context = LocalContext.current
     Button(
         modifier = Modifier.padding(
-            start = 48.dp, end = 48.dp, top = 36.dp, bottom = 30.dp
+            start = 30.dp, end = 30.dp, top = 28.dp, bottom = 10.dp
         ),
         onClick = {
             context.getActivity()?.let {
-                launchOfferwall(it) {
-                    creditCoins(it)
+                launchOfferwall(it) { coins ->
+                    creditCoins(coins)
                 }
             }
         },
