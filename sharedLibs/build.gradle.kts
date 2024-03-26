@@ -44,4 +44,5 @@ dependencies {
     api(libs.koin.core)
     api(libs.koin.android)
     api("com.pubscale.sdkone:offerwall:1.0.6-beta2")
+    api("androidx.core:core-splashscreen:1.0.0")
 }

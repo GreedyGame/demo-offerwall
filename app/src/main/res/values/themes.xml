@@ -1,13 +1,20 @@
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.OfferwallDemoApp" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:statusBarColor">@color/green</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/home_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColor">@color/black_light</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="Theme.OfferwallDemoApp" parent="Base.Theme.OfferwallDemoApp" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="android:statusBarColor">@color/home_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="windowSplashScreenBackground">@color/home_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.OfferwallDemoApp</item>
+    </style>
+
 </resources>
