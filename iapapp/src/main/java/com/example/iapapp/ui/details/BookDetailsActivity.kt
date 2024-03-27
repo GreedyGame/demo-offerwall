@@ -20,6 +20,7 @@ class BookDetailsActivity : AppCompatActivity() {
     private val mViewModel by viewModel<BookDetailsViewModel>()
     private lateinit var mMediaPlayer: MediaPlayer
     private val mAppPreferences by inject<AppPreferences>()
+    private var getMoreCoinsBottomSheet: GetMoreCoinsBottomSheet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,12 +133,15 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     private fun showGetMoreCoinsDialog() {
-        val dialog = GetMoreCoinsBottomSheet.newInstance {
+        if (getMoreCoinsBottomSheet != null) {
+            return
+        }
+        getMoreCoinsBottomSheet = GetMoreCoinsBottomSheet.newInstance {
             updateWallBalanceUi()
             mViewModel.resumePlayer()
             mViewModel.markBookAsUnlocked()
         }
-        dialog.show(supportFragmentManager, null)
+        getMoreCoinsBottomSheet?.show(supportFragmentManager, null)
     }
 
     private fun updateBookInfo(model: BookModel) {
