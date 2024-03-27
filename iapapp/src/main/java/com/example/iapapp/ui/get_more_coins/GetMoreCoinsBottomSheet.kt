@@ -1,10 +1,13 @@
 package com.example.iapapp.ui.get_more_coins
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentDialog
+import androidx.activity.OnBackPressedCallback
 import com.example.iapapp.databinding.BottomSheetGetMoreCoinsBinding
 import com.example.iapapp.ui.store.StoreActivity
 import com.example.iapapp.utils.AppPreferences
@@ -18,6 +21,17 @@ class GetMoreCoinsBottomSheet(private val onBookPurchased: () -> Unit) :
 
     companion object {
         fun newInstance(onBookPurchased: () -> Unit) = GetMoreCoinsBottomSheet(onBookPurchased)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).also { dialog ->
+            (dialog as ComponentDialog).onBackPressedDispatcher.addCallback(this, object :
+                OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            })
+        }
     }
 
     override fun onCreateView(
