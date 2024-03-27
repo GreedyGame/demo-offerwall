@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.webkit.URLUtil
 import androidx.appcompat.app.AppCompatActivity
 import com.example.offerwalldemoapp.databinding.ActivityHelpEmailBinding
-import com.example.offerwalldemoapp.utility.showToast
+import com.example.sharedlibs.showToast
 
 class HelpEmailActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityHelpEmailBinding
