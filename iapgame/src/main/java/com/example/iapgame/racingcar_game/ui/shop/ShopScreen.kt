@@ -229,7 +229,8 @@ fun ShowItems(
                             return@clickable
                         }
                         buyCar(it)
-                    }) {
+                    })
+                {
                     val bgColor = if (it.carIsOwned) {
                         Color.White
                     } else {
@@ -267,7 +268,19 @@ fun ShowItems(
                                 },
                             border = BorderStroke(width = 2.dp, color = WalletStroke),
                             colors = ButtonDefaults.buttonColors(WalletSolid),
-                            onClick = { },
+                            onClick = {
+                                if (availableCoins() < it.carCost) {
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Insufficient balance!",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    return@Button
+                                }
+                                buyCar(it)
+                            },
                             contentPadding = PaddingValues(0.dp),
                         ) {
                             Row(
