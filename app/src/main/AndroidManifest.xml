@@ -26,6 +26,10 @@
         </activity>
 
         <activity
+            android:name=".ui.OfflineActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.dashboard.MainActivity"
             android:screenOrientation="portrait" />
         <activity
