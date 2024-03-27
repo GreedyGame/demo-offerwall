@@ -1,5 +1,6 @@
 package com.example.offerwalldemoapp.ui.contact
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.offerwalldemoapp.databinding.FragmentContactsBinding
 import com.example.offerwalldemoapp.ui.dashboard.MainViewModel
+import com.example.offerwalldemoapp.ui.help_email.HelpEmailActivity
 
 class ContactFragment : Fragment() {
     private lateinit var mBinding: FragmentContactsBinding
@@ -29,6 +31,15 @@ class ContactFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback {
             mActivityViewModel.openHomeScreen()
+        }
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        with(mBinding) {
+            btnContactTeam.setOnClickListener {
+                startActivity(Intent(requireActivity(), HelpEmailActivity::class.java))
+            }
         }
     }
 }

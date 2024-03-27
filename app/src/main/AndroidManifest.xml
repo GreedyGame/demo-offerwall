@@ -11,10 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +25,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.dashboard.MainActivity" />
+        <activity
+            android:name=".ui.dashboard.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.help_email.HelpEmailActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

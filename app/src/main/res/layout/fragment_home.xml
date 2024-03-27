@@ -92,11 +92,11 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:translationY="3dp"
+                android:translationY="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_flappy_bird" />
+                app:srcCompat="@drawable/ic_game_illustration" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,5 +11,5 @@
     <item
         android:id="@+id/menu_contact"
         android:icon="@drawable/menu_contact"
-        android:title="Contact" />
+        android:title="Help" />
 </menu>
