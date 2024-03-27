@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.iapgame.databinding.ActivityGameDemoLauncherBinding
 import com.example.iapgame.di.parentModule
 import com.example.iapgame.racingcar_game.ui.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.core.context.loadKoinModules
 
 class GameDemoLauncherActivity : AppCompatActivity() {
@@ -15,9 +19,11 @@ class GameDemoLauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityGameDemoLauncherBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
         loadKoinModules(parentModule)
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            startActivity(Intent(this@GameDemoLauncherActivity, MainActivity::class.java))
+            finish()
+        }
     }
 }

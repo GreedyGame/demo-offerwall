@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F8F9F7"
+    android:paddingHorizontal="15dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgPubscale"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:layout_constraintBottom_toTopOf="@id/pocketStories"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_racing_game_logo" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/pocketStories"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintEnd_toEndOf="@id/imgPubscale"
+        app:layout_constraintStart_toStartOf="@id/imgPubscale"
+        app:layout_constraintTop_toBottomOf="@id/imgPubscale"
+        app:srcCompat="@drawable/ic_highway_rider" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@id/text1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_pubscale_logo" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:alpha="0.6"
+        android:gravity="center_horizontal"
+        android:text="A Demo game for Native PubScale OfferWall integration"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
