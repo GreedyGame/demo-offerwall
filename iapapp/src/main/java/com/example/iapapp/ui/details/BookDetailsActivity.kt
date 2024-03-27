@@ -4,7 +4,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.SeekBar
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.iapapp.R
 import com.example.iapapp.data.BookModel
@@ -59,12 +58,12 @@ class BookDetailsActivity : AppCompatActivity() {
                 override fun onProgressChanged(
                     seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
-                    if (!fromUser) {
-                        return
-                    }
                     if (progress >= 10_000 && !mViewModel.isBookUnlocked()) {
                         mViewModel.pausePlayer()
                         showGetMoreCoinsDialog()
+                        return
+                    }
+                    if (!fromUser) {
                         return
                     }
                     mViewModel.updateCurrentTime(progress)
