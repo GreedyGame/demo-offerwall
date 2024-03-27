@@ -7,6 +7,18 @@ android {
     namespace = "com.example.offerwalldemoapp"
     compileSdk = 34
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("../debug.keystore")
+        }
+        create("release") {
+            keyAlias = "demo-key"
+            keyPassword = "demoPass123"
+            storeFile = file("../release.jks")
+            storePassword = "demoPass123"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.greedygame.offerwall.demo"
         minSdk = 24
@@ -18,12 +30,18 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("release") {
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -35,6 +53,12 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("com.pubscale.caterpillar:analytics:0.20")
     }
 }
 
