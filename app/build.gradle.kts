@@ -8,9 +8,6 @@ android {
     compileSdk = 34
 
     signingConfigs {
-        getByName("debug") {
-            storeFile = file("../debug.keystore")
-        }
         create("release") {
             keyAlias = "demo-key"
             keyPassword = "demoPass123"
@@ -38,10 +35,6 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
             isDebuggable = false
-        }
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = true
         }
     }
     compileOptions {
