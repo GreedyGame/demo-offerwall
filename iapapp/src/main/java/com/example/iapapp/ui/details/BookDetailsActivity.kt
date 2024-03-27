@@ -58,6 +58,9 @@ class BookDetailsActivity : AppCompatActivity() {
                 override fun onProgressChanged(
                     seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
+                    if (!fromUser) {
+                        return
+                    }
                     if (progress >= 10_000 && !mViewModel.isBookUnlocked()) {
                         mViewModel.pausePlayer()
                         showGetMoreCoinsDialog()
@@ -149,7 +152,7 @@ class BookDetailsActivity : AppCompatActivity() {
     }
 
     private fun createMediaPlayer() {
-        mMediaPlayer = MediaPlayer.create(this@BookDetailsActivity, R.raw.sample_audio)
+        mMediaPlayer = MediaPlayer.create(this, R.raw.sample_audio)
         with(mBinding) {
             btnPlayPause.setImageResource(R.drawable.ic_play)
             updateCurrentTimeUi(mMediaPlayer.currentPosition)
@@ -159,10 +162,10 @@ class BookDetailsActivity : AppCompatActivity() {
 
     private fun playMediaPlayer() {
         disablePlayerSideButtons(false)
-        mMediaPlayer.start()
         mMediaPlayer.setOnCompletionListener {
             mViewModel.audioFinishedPlaying()
         }
+        mMediaPlayer.start()
         with(mBinding) {
             btnPlayPause.setImageResource(R.drawable.ic_pause)
         }
