@@ -6,13 +6,12 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.example.iapgame.racingcar_game.utils.Constants
 import kotlin.random.Random
 
-class BlockersState(image: ImageBitmap) {
+class BlockersState(private val image: ImageBitmap) {
 
     private val blockersCount = 100 / Constants.BLOCKER_INTERSPACE_PERCENTAGE
-    private val blockers = (1..blockersCount).map {
+    private var blockers = (1..blockersCount).map {
         BlockState(
-            image = image,
-            lanePosition = Random.nextInt(from = 0, until = Constants.LANE_COUNT)
+            image = image, lanePosition = Random.nextInt(from = 0, until = Constants.LANE_COUNT)
         )
     }
 
@@ -32,4 +31,11 @@ class BlockersState(image: ImageBitmap) {
         }
     }
 
+    fun reset() {
+        blockers = (1..blockersCount).map {
+            BlockState(
+                image = image, lanePosition = Random.nextInt(from = 0, until = Constants.LANE_COUNT)
+            )
+        }
+    }
 }

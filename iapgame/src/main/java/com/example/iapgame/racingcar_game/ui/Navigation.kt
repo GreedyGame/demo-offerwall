@@ -24,8 +24,6 @@ import org.koin.androidx.compose.koinViewModel
 
 sealed class Destinations(val route: String) {
     data object Game : Destinations("game")
-    data object GetReady : Destinations("get_ready")
-    data object Store : Destinations("store")
 }
 
 @Composable
@@ -39,23 +37,14 @@ fun RacingCarGameNavHost(viewModel: MainViewModel = koinViewModel(), exitGame: (
     ) {
         NavHost(navController, Destinations.Game.route) {
             gameScreen(navController = navController, viewModel = viewModel, exitGame = exitGame)
-            storeScreen(navController = navController, viewModel = viewModel)
         }
     }
 }
 
-private fun NavGraphBuilder.storeScreen(
-    navController: NavHostController, viewModel: MainViewModel
-) {
-}
-
 private fun NavGraphBuilder.gameScreen(
-    navController: NavHostController,
-    viewModel: MainViewModel,
-    exitGame: () -> Unit
+    navController: NavHostController, viewModel: MainViewModel, exitGame: () -> Unit
 ) {
     composable(Destinations.Game.route) {
-
         val context = LocalContext.current
         LaunchedEffect(context) {
             viewModel.vibrateSharedFlow.collect {
@@ -70,10 +59,13 @@ private fun NavGraphBuilder.gameScreen(
         val acceleration by viewModel.acceleration.collectAsState()
         val movementInput by viewModel.movementInput.collectAsState()
         val resourcePack by viewModel.resourcePack.collectAsState()
+        val isCarCollided by viewModel.isCarCollided.collectAsState()
+        val finalScore by viewModel.finalScore.collectAsState()
 
         RacingGameScreen(
             shopCars = { shopCars },
             availableCoins = { availableCoins },
+            finalScore = { finalScore },
             gameScore = { gameScore },
             highscore = { highscore },
             resourcePack = { resourcePack },
@@ -94,6 +86,12 @@ private fun NavGraphBuilder.gameScreen(
             },
             creditCoins = {
                 viewModel.creditCoins(it)
+            },
+            isCarCollided = {
+                isCarCollided
+            },
+            restartGame = {
+                navController.navigate(Destinations.Game.route)
             }
         )
     }

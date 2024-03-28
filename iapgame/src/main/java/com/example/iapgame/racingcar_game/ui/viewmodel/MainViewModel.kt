@@ -15,7 +15,6 @@ import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.NightRacingResourcePack
 import com.example.iapgame.racingcar_game.ui.models.RacingResourcePack
 import com.example.iapgame.racingcar_game.ui.shop.CarInfo
-import com.example.iapgame.racingcar_game.utils.Constants.COLLISION_SCORE_PENALTY
 import com.example.iapgame.racingcar_game.utils.Constants.DEFAULT_ACCELEROMETER_SENSITIVITY
 import com.example.iapgame.racingcar_game.utils.Constants.INITIAL_GAME_SCORE
 import com.example.iapgame.racingcar_game.utils.SoundRepository
@@ -44,7 +43,7 @@ class MainViewModel constructor(
     private val _acceleration = MutableStateFlow(AccelerationData(0f, 0f, 0f))
     val acceleration = _acceleration.asStateFlow()
 
-    private val _movementInput = MutableStateFlow(MovementInput.TapGestures)
+    private val _movementInput = MutableStateFlow(MovementInput.SwipeGestures)
     val movementInput = _movementInput.asStateFlow()
 
     private val _availableCoins = MutableStateFlow(0)
@@ -53,11 +52,17 @@ class MainViewModel constructor(
     private val _gameScore = MutableStateFlow(INITIAL_GAME_SCORE)
     val gameScore = _gameScore.asStateFlow()
 
+    private val _finalScore = MutableStateFlow(INITIAL_GAME_SCORE)
+    val finalScore = _finalScore.asStateFlow()
+
     private val _highscore = MutableStateFlow(0)
     val highscore = _highscore.asStateFlow()
 
     private val _cars = MutableStateFlow(listOf<CarInfo>())
     val cars = _cars.asStateFlow()
+
+    private val _isCarCollided = MutableStateFlow(false)
+    val isCarCollided = _isCarCollided.asStateFlow()
 
     private val _resourcePack = MutableStateFlow<RacingResourcePack>(NightRacingResourcePack())
     val resourcePack = _resourcePack.asStateFlow()
@@ -114,11 +119,14 @@ class MainViewModel constructor(
 
     private fun observeCollision() {
         carAndBlockerCollisionStateFlow.onEach { hasCollision ->
+            _isCarCollided.update { hasCollision }
             if (hasCollision) {
-                _gameScore.update { currentScore ->
-                    val newScore = currentScore - COLLISION_SCORE_PENALTY
-                    newScore.takeIf { it > INITIAL_GAME_SCORE } ?: INITIAL_GAME_SCORE
-                }
+                _finalScore.update { _gameScore.value }
+                resetGameScore()
+//                _gameScore.update { currentScore ->
+//                    val newScore = currentScore - COLLISION_SCORE_PENALTY
+//                    newScore.takeIf { it > INITIAL_GAME_SCORE } ?: INITIAL_GAME_SCORE
+//                }
                 playBlockerHitSound()
                 vibrateSharedFlow.tryEmit(Unit)
             }
@@ -159,7 +167,7 @@ class MainViewModel constructor(
         }
     }
 
-    fun resetGameScore() {
+    private fun resetGameScore() {
         _gameScore.update { INITIAL_GAME_SCORE }
     }
 

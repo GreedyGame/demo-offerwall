@@ -29,30 +29,25 @@ fun GameCanvas(
             backgroundState = backgroundState,
             backgroundSpeed = backgroundSpeed
         )
-
         drawBlockers(
             gameState = gameState,
             blockersState = blockersState,
             backgroundSpeed = backgroundSpeed,
             onDraw = onBlockerRectsDraw
         )
-
         drawCar(
-            carState = carState,
-            carOffsetIndex = carOffsetIndex,
-            onDraw = onCarRectDraw
+            carState = carState, carOffsetIndex = carOffsetIndex, onDraw = onCarRectDraw
         )
 
     }
 }
 
 private fun DrawScope.drawBackground(
-    gameState: GameState,
-    backgroundState: BackgroundState,
-    backgroundSpeed: Int
+    gameState: GameState, backgroundState: BackgroundState, backgroundSpeed: Int
 ) {
-    if (!gameState.isPaused())
+    if (gameState.isRunning()) {
         backgroundState.move(velocity = backgroundSpeed)
+    }
     backgroundState.draw(drawScope = this)
 }
 
@@ -62,18 +57,18 @@ private fun DrawScope.drawBlockers(
     backgroundSpeed: Int,
     onDraw: (List<Rect>) -> Unit,
 ) {
-    if (!gameState.isStopped()) {
-        if (!gameState.isPaused())
-            blockersState.move(velocity = backgroundSpeed)
-        val rects = blockersState.draw(drawScope = this)
-        onDraw(rects)
+    if (gameState.isStopped()) {
+        return
     }
+    if (gameState.isRunning()) {
+        blockersState.move(velocity = backgroundSpeed)
+    }
+    val rects = blockersState.draw(drawScope = this)
+    onDraw(rects)
 }
 
 private fun DrawScope.drawCar(
-    carState: CarState,
-    carOffsetIndex: Float,
-    onDraw: (Rect) -> Unit
+    carState: CarState, carOffsetIndex: Float, onDraw: (Rect) -> Unit
 ) {
     val rect = carState.draw(drawScope = this, offsetIndex = carOffsetIndex)
     onDraw(rect)

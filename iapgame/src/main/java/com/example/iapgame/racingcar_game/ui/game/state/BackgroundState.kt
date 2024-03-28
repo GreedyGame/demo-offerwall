@@ -36,4 +36,8 @@ data class BackgroundState(
             )
         }
     }
+
+    fun reset() {
+        currentPosY = 0
+    }
 }

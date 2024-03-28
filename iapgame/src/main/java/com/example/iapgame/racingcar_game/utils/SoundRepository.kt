@@ -35,11 +35,11 @@ class SoundRepository(private val context: Context) {
     }
 
     fun playBackgroundMusic(musicResourceId: Int = R.raw.background) {
-//        mediaPlayer?.stop()
-//        mediaPlayer?.release()
-//        mediaPlayer = MediaPlayer.create(context, musicResourceId)
-//        mediaPlayer?.isLooping = true
-//        mediaPlayer?.start()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = MediaPlayer.create(context, musicResourceId)
+        mediaPlayer?.isLooping = true
+        mediaPlayer?.start()
     }
 
     fun stopBackgroundMusic() {

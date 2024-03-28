@@ -1,5 +1,6 @@
 package com.example.iapgame.racingcar_game.ui.game
 
+import android.widget.Toast
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -21,14 +22,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import com.example.iapgame.racingcar_game.ui.game.state.BackgroundState
 import com.example.iapgame.racingcar_game.ui.game.state.BlockersState
 import com.example.iapgame.racingcar_game.ui.game.state.CarState
 import com.example.iapgame.racingcar_game.ui.game.state.DialogState
 import com.example.iapgame.racingcar_game.ui.game.state.GameState
+import com.example.iapgame.racingcar_game.ui.home.GameOverScreen
+import com.example.iapgame.racingcar_game.ui.home.GamePausedScreen
 import com.example.iapgame.racingcar_game.ui.home.HomeScreen
 import com.example.iapgame.racingcar_game.ui.models.AccelerationData
+import com.example.iapgame.racingcar_game.ui.models.CarPosition
 import com.example.iapgame.racingcar_game.ui.models.MovementInput
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.Accelerometer
 import com.example.iapgame.racingcar_game.ui.models.MovementInput.SwipeGestures
@@ -45,6 +50,7 @@ fun RacingGameScreen(
     shopCars: () -> List<CarInfo>,
     availableCoins: () -> Int,
     gameScore: () -> Int,
+    finalScore: () -> Int,
     highscore: () -> Int,
     acceleration: () -> AccelerationData,
     movementInput: () -> MovementInput,
@@ -56,13 +62,15 @@ fun RacingGameScreen(
     exitGame: () -> Unit,
     newCarSelected: (CarInfo) -> Unit,
     buyCar: (CarInfo) -> Unit,
-    creditCoins: (Int) -> Unit
+    creditCoins: (Int) -> Unit,
+    isCarCollided: () -> Boolean,
+    restartGame: () -> Unit
 ) {
     // resources
     val carImageDrawableBitmap = ImageBitmap.imageResource(resourcePack().carImageDrawable)
     val backgroundImageBitmap = ImageBitmap.imageResource(resourcePack().backgroundImageDrawable)
     val blockerImageBitmap = ImageBitmap.imageResource(resourcePack().blockerImageDrawable)
-
+    val context = LocalContext.current
     // states
     val gameState by remember {
         mutableStateOf(GameState())
@@ -77,7 +85,6 @@ fun RacingGameScreen(
         )
     }
     carState.changeImage(carImageDrawableBitmap)
-
     val blockersState by remember {
         mutableStateOf(
             BlockersState(image = blockerImageBitmap)
@@ -93,6 +100,10 @@ fun RacingGameScreen(
         derivedStateOf {
             (gameScore() / Constants.GAME_SCORE_TO_VELOCITY_RATIO) + Constants.INITIAL_VELOCITY
         }
+    }
+
+    if (isCarCollided()) {
+        gameState.gameOver()
     }
 
     // ticker
@@ -116,23 +127,27 @@ fun RacingGameScreen(
             label = "car offset index",
             animationSpec = spring(stiffness = CAR_MOVEMENT_SPRING_ANIMATION_STIFFNESS)
         )
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .then(if (gameState.isRunning()) {
-                when (movementInput()) {
-                    TapGestures -> Modifier.detectCarPositionByPointerInput(maxWidth = maxWidth.value.toInt()) { position ->
-                        carState.moveWithTapGesture(position)
-                    }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .then(if (gameState.isRunning()) {
+                    when (movementInput()) {
+                        TapGestures -> Modifier.detectCarPositionByPointerInput(maxWidth = maxWidth.value.toInt()) { position ->
+                            carState.moveWithTapGesture(position)
+                        }
 
-                    SwipeGestures -> Modifier.detectSwipeDirection(maxWidth.value.toInt()) { swipeDirection ->
-                        carState.moveWithSwipeGesture(swipeDirection)
-                    }
+                        SwipeGestures -> Modifier.detectSwipeDirection(maxWidth.value.toInt()) { swipeDirection ->
+                            carState.moveWithSwipeGesture(swipeDirection)
+                        }
 
-                    Accelerometer -> Modifier
+                        Accelerometer -> Modifier
+                    }
+                } else {
+                    Modifier
                 }
-            } else {
-                Modifier
-            })) {
+                )
+        )
+        {
             GameCanvas(
                 gameState = gameState,
                 backgroundState = backgroundState,
@@ -146,16 +161,37 @@ fun RacingGameScreen(
             )
             if (!gameState.isRunning()) {
                 if (dialogState.isHome()) {
-                    val score = if (gameState.isPaused()) {
-                        gameScore()
+                    if (gameState.isStopped()) {
+                        HomeScreen(highscore(), exitGame = exitGame, startGame = {
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Swipe to move car!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                            gameState.run()
+                        }, shop = {
+                            dialogState.showShop()
+                        })
+                    } else if (gameState.isGameOver()) {
+                        GameOverScreen(finalScore(), exitGame = exitGame,
+                            restartGame = {
+                                gameState.run()
+                                backgroundState.reset()
+                                blockersState.reset()
+                                carState.changePosition(CarPosition.Middle)
+                            }, shop = {
+                                dialogState.showShop()
+                            })
                     } else {
-                        highscore()
+                        GamePausedScreen(gameScore(), exitGame = exitGame,
+                            resumeGame = {
+                                gameState.run()
+                            }, shop = {
+                                dialogState.showShop()
+                            })
                     }
-                    HomeScreen(score, exitGame = exitGame, startGame = {
-                        gameState.run()
-                    }, shop = {
-                        dialogState.showShop()
-                    })
                 } else if (dialogState.isShop()) {
                     ShopScreen(
                         shopCars = {

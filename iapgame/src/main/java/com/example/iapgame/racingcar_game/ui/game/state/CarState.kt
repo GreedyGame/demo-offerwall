@@ -28,6 +28,10 @@ data class CarState(
 
     private var rotationDirection: RotationDirection? = null
 
+    fun changePosition(carPosition: CarPosition) {
+        position = carPosition
+    }
+
     fun draw(
         drawScope: DrawScope,
         offsetIndex: Float
