@@ -1,5 +1,7 @@
 package com.example.offerwalldemoapp.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +43,27 @@ class HomeFragment : Fragment() {
             cardIapDemo.setOnClickListener {
                 appCoordinator.showIapDemoApp(requireActivity())
             }
+            btnViewDocs.setOnClickListener {
+                openUrl("https://pubscale.gitbook.io/offerwall-sdk")
+            }
+            btnContactUs.setOnClickListener {
+                sendEmail(recipientEmail = "hello@pubscale.com")
+            }
+        }
+    }
+
+    private fun openUrl(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+    }
+
+    private fun sendEmail(recipientEmail: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(recipientEmail))
+        }
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(Intent.createChooser(intent, "Send email..."))
         }
     }
 }

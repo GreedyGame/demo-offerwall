@@ -32,9 +32,6 @@
         <activity
             android:name=".ui.dashboard.MainActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.help_email.HelpEmailActivity"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

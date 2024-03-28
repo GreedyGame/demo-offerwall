@@ -21,8 +21,13 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.005"
-
+        versionName = "1.0.006"
+        val apkName = "PubScale Offerwall Demo - $versionName($versionCode).apk"
+        buildOutputs.all {
+            val variantOutputImpl =
+                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            variantOutputImpl.outputFileName = apkName
+        }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
