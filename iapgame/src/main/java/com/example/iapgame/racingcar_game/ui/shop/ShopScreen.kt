@@ -229,8 +229,7 @@ fun ShowItems(
                             return@clickable
                         }
                         buyCar(it)
-                    })
-                {
+                    }) {
                     val bgColor = if (it.carIsOwned) {
                         Color.White
                     } else {
@@ -270,13 +269,9 @@ fun ShowItems(
                             colors = ButtonDefaults.buttonColors(WalletSolid),
                             onClick = {
                                 if (availableCoins() < it.carCost) {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Insufficient balance!",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
+                                    Toast.makeText(
+                                        context, "Insufficient balance!", Toast.LENGTH_SHORT
+                                    ).show()
                                     return@Button
                                 }
                                 buyCar(it)
@@ -348,7 +343,7 @@ fun GetFreeCoinsButton(creditCoins: (Int) -> Unit) {
     val context = LocalContext.current
     Button(
         modifier = Modifier.padding(
-            start = 30.dp, end = 30.dp, top = 28.dp, bottom = 10.dp
+            start = 30.dp, end = 30.dp, top = 28.dp, bottom = 30.dp
         ),
         onClick = {
             context.getActivity()?.let {
@@ -422,6 +417,7 @@ fun launchOfferwall(activity: ComponentActivity, creditCoins: (Int) -> Unit) {
         }
 
         override fun onFailed(message: String) {
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
         }
     }
     OfferWall.launch(activity, offerWallListener)

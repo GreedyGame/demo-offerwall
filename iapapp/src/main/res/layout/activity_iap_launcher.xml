@@ -49,7 +49,7 @@
         android:layout_marginBottom="40dp"
         android:alpha="0.6"
         android:gravity="center_horizontal"
-        android:text="A Demo game for Native PubScale OfferWall integration"
+        android:text="A Demo app for Native PubScale OfferWall integration"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent" />
 

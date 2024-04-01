@@ -43,7 +43,7 @@ class MainViewModel constructor(
     private val _acceleration = MutableStateFlow(AccelerationData(0f, 0f, 0f))
     val acceleration = _acceleration.asStateFlow()
 
-    private val _movementInput = MutableStateFlow(MovementInput.SwipeGestures)
+    private val _movementInput = MutableStateFlow(MovementInput.TapGestures)
     val movementInput = _movementInput.asStateFlow()
 
     private val _availableCoins = MutableStateFlow(0)

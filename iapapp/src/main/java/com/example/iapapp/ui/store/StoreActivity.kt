@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.iapapp.R
 import com.example.iapapp.databinding.ActivityStoreBinding
 import com.example.iapapp.utils.AppPreferences
+import com.example.sharedlibs.showToast
 import com.pubscale.sdkone.offerwall.OfferWall
 import com.pubscale.sdkone.offerwall.models.OfferWallListener
 import com.pubscale.sdkone.offerwall.models.Reward
@@ -27,6 +28,7 @@ class StoreActivity : AppCompatActivity() {
         }
 
         override fun onFailed(message: String) {
+            showToast(message)
         }
     }
 

@@ -21,7 +21,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.006"
+        versionName = "1.0.007"
         val apkName = "PubScale Offerwall Demo - $versionName($versionCode).apk"
         buildOutputs.all {
             val variantOutputImpl =
