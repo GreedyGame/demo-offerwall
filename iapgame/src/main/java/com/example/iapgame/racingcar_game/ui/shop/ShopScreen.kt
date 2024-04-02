@@ -245,7 +245,7 @@ fun ShowItems(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(vertical = 20.dp)
+                                .padding(vertical = 40.dp)
                         )
                     }
                     if (it.isSelected) {

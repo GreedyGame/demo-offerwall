@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -88,10 +89,11 @@ fun GamePausedScreen(
             )
             Button(
                 shape = RoundedCornerShape(0),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier
+                    .width(180.dp)
                     .border(7.dp, Brown)
                     .padding(7.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 onClick = resumeGame,
                 contentPadding = PaddingValues(0.dp)
             ) {
@@ -100,10 +102,12 @@ fun GamePausedScreen(
                     color = Color.White,
                     fontSize = 18.sp,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(all = 7.dp)
                         .background(color = Orange)
-                        .padding(vertical = 11.dp, horizontal = 53.dp),
-                    fontFamily = minecraft
+                        .padding(vertical = 11.dp),
+                    fontFamily = minecraft,
+                    textAlign = TextAlign.Center
                 )
             }
             Spacer(
@@ -113,10 +117,11 @@ fun GamePausedScreen(
             )
             Button(
                 shape = RoundedCornerShape(0),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier
+                    .width(180.dp)
                     .border(7.dp, Brown)
                     .padding(7.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 onClick = shop,
                 contentPadding = PaddingValues(0.dp)
             ) {
@@ -125,10 +130,12 @@ fun GamePausedScreen(
                     color = Color.White,
                     fontSize = 18.sp,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(all = 7.dp)
                         .background(color = Orange)
-                        .padding(vertical = 11.dp, horizontal = 53.dp),
-                    fontFamily = minecraft
+                        .padding(vertical = 11.dp),
+                    fontFamily = minecraft,
+                    textAlign = TextAlign.Center
                 )
             }
             Spacer(
@@ -138,10 +145,11 @@ fun GamePausedScreen(
             )
             Button(
                 shape = RoundedCornerShape(0),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier
+                    .width(180.dp)
                     .border(7.dp, Brown)
                     .padding(7.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 onClick = exitGame,
                 contentPadding = PaddingValues(0.dp)
             ) {
@@ -150,10 +158,12 @@ fun GamePausedScreen(
                     color = Color.White,
                     fontSize = 18.sp,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(all = 7.dp)
                         .background(color = Orange)
-                        .padding(vertical = 11.dp, horizontal = 53.dp),
-                    fontFamily = minecraft
+                        .padding(vertical = 11.dp),
+                    fontFamily = minecraft,
+                    textAlign = TextAlign.Center
                 )
             }
         }
