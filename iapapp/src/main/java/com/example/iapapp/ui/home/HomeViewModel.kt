@@ -19,12 +19,42 @@ class HomeViewModel : ViewModel() {
     )
 
     val defaultBooks = listOf(
-        BookModel("Moby Dick", "Herman Meville", R.drawable.ic_book_1, 4.5, "English", 1),
-        BookModel("Authority", "Jeff Vandermer", R.drawable.ic_book_2, 4.1, "English", 1),
         BookModel(
-            "You were never really here", "Jonathan Ames", R.drawable.ic_book_3, 4.2, "English", 1
+            "Moby Dick",
+            "Herman Meville",
+            R.drawable.ic_book_1,
+            4.5,
+            "English",
+            1,
+            R.raw.mobydick_audio
         ),
-        BookModel("1000 Black Umbrellas", "Daniel McGinn", R.drawable.ic_book_4, 4.2, "English", 1)
+        BookModel(
+            "Sowing Seeds in Danny",
+            "Nellie McClung",
+            R.drawable.ic_book_2,
+            4.8,
+            "English",
+            1,
+            R.raw.sowingseedsindanny_audio
+        ),
+        BookModel(
+            "The Feasting Dead",
+            "John Metcalfe",
+            R.drawable.ic_book_3,
+            4.6,
+            "English",
+            1,
+            R.raw.thefeastingdead_audio
+        ),
+        BookModel(
+            "The Life of St. Paul",
+            "James Stalker",
+            R.drawable.ic_book_4,
+            4.9,
+            "English",
+            1,
+            R.raw.thelifeofstpaul_audio
+        )
     )
 
     private val _genres = MutableLiveData<List<GenreModel>>()

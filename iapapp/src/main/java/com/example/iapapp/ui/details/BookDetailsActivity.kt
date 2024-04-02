@@ -89,8 +89,8 @@ class BookDetailsActivity : AppCompatActivity() {
             }
             playerState.observe(this@BookDetailsActivity) {
                 when (it) {
-                    PlayerState.Idle -> {
-                        createMediaPlayer()
+                    is PlayerState.Idle -> {
+                        createMediaPlayer(it.bookModel)
                         disablePlayerSideButtons(true)
                     }
 
@@ -115,9 +115,9 @@ class BookDetailsActivity : AppCompatActivity() {
                         }
                     }
 
-                    PlayerState.Restart -> {
+                    is PlayerState.Restart -> {
                         mMediaPlayer.reset()
-                        createMediaPlayer()
+                        createMediaPlayer(it.bookModel)
                         playMediaPlayer()
                     }
                 }
@@ -155,8 +155,8 @@ class BookDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun createMediaPlayer() {
-        mMediaPlayer = MediaPlayer.create(this, R.raw.sample_audio)
+    private fun createMediaPlayer(bookModel: BookModel) {
+        mMediaPlayer = MediaPlayer.create(this, bookModel.audioFile)
         with(mBinding) {
             btnPlayPause.setImageResource(R.drawable.ic_play)
             updateCurrentTimeUi(mMediaPlayer.currentPosition)

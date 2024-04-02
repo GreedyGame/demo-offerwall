@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.iapapp.R
 import com.example.iapapp.data.BookModel
 import com.example.iapapp.utils.AppPreferences
 import com.example.iapapp.utils.IntentConstants
@@ -29,22 +30,23 @@ class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewMod
         get() = _updateCurrentTime
 
     fun handleIntent(intent: Intent?) {
-        _bookModel.postValue(intent?.getParcelableExtra<BookModel>(IntentConstants.BOOKS_MODEL))
-        _playerState.postValue(PlayerState.Idle)
+        val book = intent?.getParcelableExtra<BookModel>(IntentConstants.BOOKS_MODEL)
+        _bookModel.postValue(book!!)
+        _playerState.postValue(PlayerState.Idle(book))
     }
 
     fun playPauseButtonClicked() {
         when (playerState.value!!) {
-            PlayerState.Idle, PlayerState.Paused -> {
+            is PlayerState.Idle, PlayerState.Paused -> {
                 _playerState.postValue(PlayerState.Playing)
             }
 
-            PlayerState.Playing, PlayerState.Restart -> {
+            is PlayerState.Restart, PlayerState.Playing -> {
                 _playerState.postValue(PlayerState.Paused)
             }
 
             PlayerState.Finished -> {
-                _playerState.postValue(PlayerState.Restart)
+                _playerState.postValue(PlayerState.Restart(bookModel.value!!))
             }
         }
     }
@@ -52,13 +54,13 @@ class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewMod
     fun watchProgress() {
         viewModelScope.launch {
             when (playerState.value!!) {
-                PlayerState.Playing, PlayerState.Restart -> {
+                PlayerState.Playing, is PlayerState.Restart -> {
                     _progressWatcherRunning.postValue(Unit)
                     delay(1000)
                     watchProgress()
                 }
 
-                PlayerState.Idle, PlayerState.Paused, PlayerState.Finished -> {
+                is PlayerState.Idle, PlayerState.Paused, PlayerState.Finished -> {
                     return@launch
                 }
             }
@@ -71,27 +73,27 @@ class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewMod
 
     fun resumePlayer() {
         when (playerState.value!!) {
-            PlayerState.Idle, PlayerState.Paused -> {
+            is PlayerState.Idle, PlayerState.Paused -> {
                 _playerState.postValue(PlayerState.Playing)
             }
 
-            PlayerState.Playing, PlayerState.Restart -> {
+            PlayerState.Playing, is PlayerState.Restart -> {
                 return
             }
 
             PlayerState.Finished -> {
-                _playerState.postValue(PlayerState.Restart)
+                _playerState.postValue(PlayerState.Restart(bookModel.value!!))
             }
         }
     }
 
     fun pausePlayer() {
         when (playerState.value!!) {
-            PlayerState.Idle, PlayerState.Paused, PlayerState.Finished -> {
+            is PlayerState.Idle, PlayerState.Paused, PlayerState.Finished -> {
                 return
             }
 
-            PlayerState.Playing, PlayerState.Restart -> {
+            PlayerState.Playing, is PlayerState.Restart -> {
                 _playerState.postValue(PlayerState.Paused)
             }
         }
@@ -106,40 +108,40 @@ class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewMod
     }
 
     fun markBookAsUnlocked() {
-        when (bookModel.value?.bookName) {
-            "Moby Dick" -> {
+        when (bookModel.value?.bookCoverImage) {
+            R.drawable.ic_book_1 -> {
                 appPreferences.isBook1Unlocked = true
             }
 
-            "Authority" -> {
+            R.drawable.ic_book_2 -> {
                 appPreferences.isBook2Unlocked = true
             }
 
-            "You were never really here" -> {
+            R.drawable.ic_book_3 -> {
                 appPreferences.isBook3Unlocked = true
             }
 
-            "1000 Black Umbrellas" -> {
+            R.drawable.ic_book_4 -> {
                 appPreferences.isBook4Unlocked = true
             }
         }
     }
 
     fun isBookUnlocked(): Boolean {
-        return when (bookModel.value?.bookName) {
-            "Moby Dick" -> {
+        return when (bookModel.value?.bookCoverImage) {
+            R.drawable.ic_book_1 -> {
                 appPreferences.isBook1Unlocked
             }
 
-            "Authority" -> {
+            R.drawable.ic_book_2 -> {
                 appPreferences.isBook2Unlocked
             }
 
-            "You were never really here" -> {
+            R.drawable.ic_book_3 -> {
                 appPreferences.isBook3Unlocked
             }
 
-            "1000 Black Umbrellas" -> {
+            R.drawable.ic_book_4 -> {
                 appPreferences.isBook4Unlocked
             }
 
@@ -151,9 +153,9 @@ class BookDetailsViewModel(private val appPreferences: AppPreferences) : ViewMod
 }
 
 sealed class PlayerState {
-    data object Idle : PlayerState()
+    data class Idle(val bookModel: BookModel) : PlayerState()
     data object Playing : PlayerState()
     data object Paused : PlayerState()
     data object Finished : PlayerState()
-    data object Restart : PlayerState()
+    data class Restart(val bookModel: BookModel) : PlayerState()
 }
