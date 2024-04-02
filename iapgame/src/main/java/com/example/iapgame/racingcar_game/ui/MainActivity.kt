@@ -5,8 +5,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,11 +52,23 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     }
 
     private fun hideStatusAndNavBar() {
-        val windowInsetsController =
-            WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowInsetsController =
+                WindowCompat.getInsetsController(window, window.decorView)
+            windowInsetsController.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+
+//            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+//                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
     }
 
     private fun setupCollectors() {
