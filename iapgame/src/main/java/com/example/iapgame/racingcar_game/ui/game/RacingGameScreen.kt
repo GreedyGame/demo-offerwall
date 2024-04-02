@@ -166,7 +166,7 @@ fun RacingGameScreen(
                             Toast
                                 .makeText(
                                     context,
-                                    "Swipe to move car!",
+                                    "Tap lane to move car!",
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()

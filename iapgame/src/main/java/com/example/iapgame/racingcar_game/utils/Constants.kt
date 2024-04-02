@@ -4,7 +4,7 @@ object Constants {
 
     // game properties
     const val LANE_COUNT = 3
-    const val INITIAL_VELOCITY = 5
+    const val INITIAL_VELOCITY = 7
     const val GAME_SCORE_TO_VELOCITY_RATIO = 2
     const val INITIAL_GAME_SCORE = 0
     const val SWIPE_MIN_OFFSET_FROM_MAX_WIDTH = 6 //todo rename
