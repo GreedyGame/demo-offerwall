@@ -170,8 +170,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvCurrentTime"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="00:00" />
 
         <androidx.appcompat.widget.AppCompatSeekBar
@@ -179,6 +180,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             android:progressDrawable="@drawable/audio_waveform_drawable"
             android:splitTrack="false"
             android:thumb="@drawable/waveform_thumb_selector"
@@ -186,8 +189,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvEndTime"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="00:00" />
 
     </LinearLayout>
