@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">@color/home_bg</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="windowSplashScreenBackground">@color/home_bg</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.OfferwallDemoApp</item>
     </style>
 
