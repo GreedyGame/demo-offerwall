@@ -45,7 +45,7 @@ class IapLauncherActivity : AppCompatActivity() {
     private fun setupOfferwall() {
         OfferWall.destroy()
         val offerWallConfig =
-            OfferWallConfig.Builder(this, "66648544")
+            OfferWallConfig.Builder(this, "test_66648544")
                 .setLoaderForegroundBitmap(svgToBitmap(R.drawable.ic_pocket_audio_logo)!!)
                 .setFullscreenEnabled(true).build()
         OfferWall.init(offerWallConfig, object : OfferWallInitListener {

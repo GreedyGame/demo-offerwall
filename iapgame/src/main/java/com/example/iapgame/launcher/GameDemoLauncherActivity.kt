@@ -37,7 +37,7 @@ class GameDemoLauncherActivity : AppCompatActivity() {
     private fun setupOfferwall() {
         OfferWall.destroy()
         val offerWallConfig =
-            OfferWallConfig.Builder(this, "63902223")
+            OfferWallConfig.Builder(this, "test_63902223")
                 .setLoaderForegroundBitmap(svgToBitmap(R.drawable.ic_racing_game_logo)!!)
                 .setFullscreenEnabled(true).build()
         OfferWall.init(offerWallConfig, object : OfferWallInitListener {
