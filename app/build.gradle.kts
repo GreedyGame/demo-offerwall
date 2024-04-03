@@ -21,8 +21,8 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.008"
-        val apkName = "PubScale Offerwall Demo - $versionName($versionCode).apk"
+        versionName = "1.0"
+        val apkName = "PubScale Offerwall Demo - v$versionCode($versionName).apk"
         buildOutputs.all {
             val variantOutputImpl =
                 this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
